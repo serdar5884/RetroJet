@@ -1,13 +1,31 @@
 plugins { id 'com.android.application' }
 android {
-    namespace 'com.retrojet.oyun'
-    compileSdk 34
+    namespace 'com.turboretro.game'
+    compileSdk 36
     defaultConfig {
-        applicationId 'com.retrojet.oyun'
+        applicationId "com.salihstudio.turboretro"
         minSdk 24
-        targetSdk 34
-        versionCode 4
-        versionName '1.3'
+        targetSdk 36
+        versionCode 56
+        versionName "9.1"
+    }
+    signingConfigs {
+        release {
+            def ks = System.getenv("TR_KEYSTORE")
+            if (ks != null && file(ks).exists()) {
+                storeFile file(ks)
+                storePassword System.getenv("TR_KEYSTORE_PASSWORD")
+                keyAlias "upload"
+                keyPassword System.getenv("TR_KEYSTORE_PASSWORD")
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            def ks = System.getenv("TR_KEYSTORE")
+            signingConfig = ((ks != null && file(ks).exists()) ? signingConfigs.release : signingConfigs.debug)
+        }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }
